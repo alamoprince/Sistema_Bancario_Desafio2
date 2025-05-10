@@ -4,7 +4,7 @@ from typing import List, Dict, Optional, Any
 # ================================================
 # Constantes
 # ================================================
-AGENCIA_PADRAO = "0001"
+AGENCIA_PADRAO = "1503"
 LIMITE_SAQUES_DIARIOS_PADRAO = 3
 LIMITE_VALOR_SAQUE_PADRAO = 500.0
 
@@ -50,7 +50,7 @@ class ContaBancaria:
         self.titular = titular
         self.saldo: float = 0.0
         self.extrato: List[str] = []
-        self.saques_realizados: List[datetime] = [] # Armazena Timestamps dos saques
+        self.saques_realizados: List[datetime] = [] 
         self.limite_saques_diarios = LIMITE_SAQUES_DIARIOS_PADRAO
         self.limite_valor_saque = LIMITE_VALOR_SAQUE_PADRAO
 
@@ -71,17 +71,10 @@ class ContaBancaria:
             print("Erro: Valor do saque deve ser positivo.")
             return False
 
-        # Verifica saques nas últimas 24 horas
         agora = datetime.now()
         saques_ultimas_24h = [
             s for s in self.saques_realizados if agora - s < timedelta(days=1)
         ]
-        
-        # Se o dia mudou, resetar a lista de saques para contar apenas os de hoje
-        # Ou, se a lógica é "últimas 24h", a linha acima já cuida disso.
-        # Se a lógica fosse "por dia calendário", precisaríamos de um reset
-        # if self.saques_realizados and self.saques_realizados[-1].date() < agora.date():
-        #    self.saques_realizados = [] # Resetaria para o novo dia
 
         if self.saldo < valor:
             print("Erro: Saldo insuficiente.")
@@ -101,7 +94,7 @@ class ContaBancaria:
 
     def exibir_extrato(self):
         print(f"\n═{' EXTRATO ':=^48}")
-        print(f"Agência: {self.agencia} | Conta: {self.numero_conta:04d}") # Formata número da conta
+        print(f"Agência: {self.agencia} | Conta: {self.numero_conta:04d}") 
         print(f"Titular: {self.titular.nome}")
         print("\nMovimentações:")
         if not self.extrato:
@@ -216,12 +209,12 @@ class Banco:
                 print("Entrada inválida. Digite um número.")
     
     def listar_contas_cadastradas(self):
-        print("\n═{' CONTAS CADASTRADAS ':=^48}")
+        print(f"\n═{' CONTAS CADASTRADAS ':=^48}")
         if not self.contas:
             print("Nenhuma conta cadastrada.")
             return
         for conta in self.contas:
-            print(conta) # Usa o __str__ da classe ContaBancaria
+            print(conta) 
         print("=" * 50)
 
 # ================================================
@@ -229,7 +222,7 @@ class Banco:
 # ================================================
 def menu_operacoes_bancarias(conta_selecionada: ContaBancaria):
     while True:
-        print("\n═{' OPERAÇÕES ':=^48}")
+        print(f"\n═{' OPERAÇÕES ':=^48}")
         print(f"Conta: {conta_selecionada.numero_conta:04d} | Titular: {conta_selecionada.titular.nome}")
         print("1 - Depositar")
         print("2 - Sacar")
@@ -259,12 +252,12 @@ def menu_operacoes_bancarias(conta_selecionada: ContaBancaria):
 
 def menu_principal(banco: Banco):
     while True:
-        print("\n═{' SISTEMA BANCÁRIO PYTHON ':=^48}")
+        print(f"\n═{' SISTEMA BANCÁRIO PYTHON ':=^48}")
         print("1 - Novo Usuário")
         print("2 - Nova Conta Bancária")
         print("3 - Acessar Conta (Operações)")
         print("4 - Listar Contas Cadastradas")
-        print("5 - Listar Usuários Cadastrados") # Nova opção
+        print("5 - Listar Usuários Cadastrados") 
         print("6 - Sair")
 
         opcao = input("Opção: ").strip()
@@ -281,11 +274,11 @@ def menu_principal(banco: Banco):
         elif opcao == "4":
             banco.listar_contas_cadastradas()
         elif opcao == "5":
-            print("\n═{' USUÁRIOS CADASTRADOS ':=^48}")
+            print(f"\n═{' USUÁRIOS CADASTRADOS ':=^48}")
             if not banco.usuarios:
                 print("Nenhum usuário cadastrado.")
             for usuario in banco.usuarios:
-                print(usuario) # Usa o __str__ da classe Usuario
+                print(usuario) 
             print("=" * 50)
         elif opcao == "6":
             print("\nObrigado por utilizar nossos serviços!")
